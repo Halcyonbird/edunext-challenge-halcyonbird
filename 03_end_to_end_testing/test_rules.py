@@ -29,12 +29,11 @@ def test_upgrade_free_to_basic():
     customer = response.json()
     assert customer['id'] == _id
 
-    data = customer['data']
-    assert data['SUBSCRIPTION'] == 'basic'
-    assert "UPGRADE_DATE" in data
-    assert "DOWNGRADE_DATE" not in data
+    assert customer['SUBSCRIPTION'] == 'basic'
+    assert "UPGRADE_DATE" in customer
+    assert "DOWNGRADE_DATE" not in customer
 
-    for key, value in data['ENABLED_FEATURES'].items():
+    for key, value in customer['ENABLED_FEATURES'].items():
         if "ENABLE_EDXNOTES" != key:
             assert value == False
         else:
@@ -58,10 +57,10 @@ def test_upgrade_basic_to_premium():
     customer = response.json()
     assert customer['id'] == _id
 
-    data = customer['data']
-    assert data['SUBSCRIPTION'] == 'premium'
-    assert "UPGRADE_DATE" in data
-    assert "DOWNGRADE_DATE" not in data
+    customer = customer['ENABLED_FEATURES']
+    assert customer['SUBSCRIPTION'] == 'premium'
+    assert "UPGRADE_DATE" in customer
+
 
 
 @pytest.mark.skipif(EMPTY, reason="Only run if there is a solution")
@@ -81,10 +80,10 @@ def test_downgrade_premium_to_free():
     customer = response.json()
     assert customer['id'] == _id
 
-    data = customer['data']
-    assert data['SUBSCRIPTION'] == 'free'
-    assert "DOWNGRADE_DATE" in data
-    assert "UPGRADE_DATE" not in data
+    
+    assert Customer['SUBSCRIPTION'] == 'free'
+    assert "DOWNGRADE_DATE" in customer
+    assert "UPGRADE_DATE" not in customer
 
-    for feat in data['ENABLED_FEATURES'].values():
+    for feat in customer['ENABLED_FEATURES'].values():
         assert feat == False
