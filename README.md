@@ -1,3 +1,30 @@
+# Changes by Daniel Diaz v1.0
+
+I have decided to change the model, in my opinion it saves a lot of work to have the necessary fields declared, 
+because this creates the validations when creating the serializer
+
+In views.py
+I have created the downgrade and upgrade methods.
+in the downgrade function through the get method we obtain the id of the costumer and obtain the object
+to modify it directly adding the changes in the fields: 
+-SUBSCRIPTION
+-DOWNGRADE_DATE 
+-ENABLED_FEATURES
+to modify ENABLED_FEATURES I created the tuple DISABLE_FEATURES, that contains all the fields converted to 'False'
+the fields into DISABLE_FEATURES can't be modified to True
+
+the upgrade function works with the serializer CustomerPlanSerializer, only the id, subscription and enabled_features fields can be modified
+after validate the data through the serializer.
+the upgrade function work with get and put methods.
+
+I tried to make my code as functional and optimal as possible.
+I have experience, I learn very quickly and I hope I can fit into your team
+my goals are learn more and more django and django rest framework
+that's all. thanks for your time
+
+
+
+
 # eduNEXT Coding Challenge
 
 In this repository you will find the description and files of you personal coding challenge.
