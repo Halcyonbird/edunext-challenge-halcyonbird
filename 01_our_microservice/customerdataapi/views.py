@@ -9,7 +9,6 @@ from rest_framework.views import  APIView
 from rest_framework.decorators import  api_view
 from customerdataapi.models import CustomerData
 from customerdataapi.serializers import CustomerDataSerializer, CustomerPlanSerializer
-import json 
 from datetime import datetime  
 ## Changes: add required libraries like datetime to saved the date fields with the server date ##
 
@@ -28,7 +27,7 @@ class CustomerDataViewSet(viewsets.ModelViewSet):
 ## Load the Customer model and change the SUBSCRIPTION field to 'free' ##
 ## save the customer changes without serializer, the serializar only is used to load the new customer data ##
 @api_view(['GET'])
-def Downgrade(request,pk):
+def downgrade(request,pk):
     DISABLE_FEATURES = {
         "CERTIFICATES_INSTRUCTOR_GENERATION": False,
         "INSTRUCTOR_BACKGROUND_TASKS": False,
@@ -52,11 +51,11 @@ def Downgrade(request,pk):
 ## Changes: create upgrade function ##
 ## save the customer changes witht serializer, the serializar is used to save the new customer data through json data ##
 @api_view(['GET','PUT'])
-def Upgrade(request,pk):
+def upgrade(request,pk):
     customer = CustomerData.objects.get(id=pk)
     customer_serializer = CustomerPlanSerializer(customer)
-    if request.method == "PUT":
 
+    if request.method == "PUT":
         customer = CustomerData.objects.get(id=pk)
         customer.UPGRADE_DATE = datetime.now()
         customer_serializer = CustomerPlanSerializer(customer,data=request.data)
@@ -65,7 +64,10 @@ def Upgrade(request,pk):
             return Response(customer_serializer.data,status=status.HTTP_202_ACCEPTED)
         else:
             return Response(customer_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-    return Response({'error': 'data not found.'},status = status.HTTP_400_BAD_REQUEST)
+    return Response(customer_serializer.data,status = status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 
